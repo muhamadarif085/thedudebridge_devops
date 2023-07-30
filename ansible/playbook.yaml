@@ -1,5 +1,6 @@
 - name: Deploy thedudebridge_app
   hosts: VM-BMS
+  gather_facts: false
   tasks:
     - name: clone project
       git:
@@ -8,16 +9,17 @@
         force: yes
         update: yes
         version: main
-    - name: Ensure docker-compose is present
-      shell: docker-compose --version
-      register: docker_compose_version
-      failed_when: "'docker-compose version' not in docker_compose_version.stdout"
+
     - name: docker-compose up
       shell: docker-compose up -d
       args:
         chdir: /home/engineer/thedudebridge_arif/thedudebridge
-    - name: docker-compose ps
-      shell: docker-compose ps
-      args:
-        chdir: /home/engineer/thedudebridge_arif/thedudebridge
+
+    - name: Jalankan perintah "docker ps"
+      shell: docker ps
+      register: docker_ps_output
+
+    - name: Tampilkan output dari "docker ps"
+      debug:
+        var: docker_ps_output.stdout_lines
         
