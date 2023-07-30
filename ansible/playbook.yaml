@@ -1,0 +1,11 @@
+- name: Deploy thedudebridge_app
+  hosts: VM-BMS
+  become: true
+  tasks:
+    - name: clone project
+      git:
+        repo: 
+    - name: Ensure docker-compose is present
+      shell: docker-compose --version
+      register: docker_compose_version
+      failed_when: "'docker-compose version' not in docker_compose_version.stdout"
