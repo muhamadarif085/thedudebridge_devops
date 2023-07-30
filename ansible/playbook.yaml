@@ -1,11 +1,23 @@
 - name: Deploy thedudebridge_app
   hosts: VM-BMS
-  become: true
   tasks:
     - name: clone project
       git:
-        repo: 
+        repo: https://github.com/muhamadarif085/thedudebridge_devops.git
+        dest: /home/engineer/thedudebridge_arif
+        force: yes
+        update: yes
+        version: main
     - name: Ensure docker-compose is present
       shell: docker-compose --version
       register: docker_compose_version
       failed_when: "'docker-compose version' not in docker_compose_version.stdout"
+    - name: docker-compose up
+      shell: docker-compose up -d
+      args:
+        chdir: /home/engineer/thedudebridge_arif/thedudebridge
+    - name: docker-compose ps
+      shell: docker-compose ps
+      args:
+        chdir: /home/engineer/thedudebridge_arif/thedudebridge
+        
